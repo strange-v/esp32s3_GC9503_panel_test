@@ -1,0 +1,88 @@
+#include "Arduino.h"
+#include <Arduino_GFX_Library.h>
+
+// #define GFX_BL 5
+
+Arduino_DataBus *bus = new Arduino_SWSPI(
+    GFX_NOT_DEFINED /* DC */
+    ,
+    38 /* CS */
+    ,
+    45 /* SCK or SCLK */
+    ,
+    48 /* MOSI */
+    ,
+    GFX_NOT_DEFINED /* MISO */
+);
+
+//   Arduino_ESP32RGBPanel(
+//       int8_t de, int8_t vsync, int8_t hsync, int8_t pclk,
+//       int8_t r0, int8_t r1, int8_t r2, int8_t r3, int8_t r4,
+//       int8_t g0, int8_t g1, int8_t g2, int8_t g3, int8_t g4, int8_t g5,
+//       int8_t b0, int8_t b1, int8_t b2, int8_t b3, int8_t b4,
+//       uint16_t hsync_polarity, uint16_t hsync_front_porch, uint16_t hsync_pulse_width, uint16_t hsync_back_porch,
+//       uint16_t vsync_polarity, uint16_t vsync_front_porch, uint16_t vsync_pulse_width, uint16_t vsync_back_porch,
+//       uint16_t pclk_active_neg = 0, int32_t prefer_speed = GFX_NOT_DEFINED, bool useBigEndian = false,
+//       uint16_t de_idle_high = 0, uint16_t pclk_idle_high = 0);
+Arduino_ESP32RGBPanel *rgbpanel = new Arduino_ESP32RGBPanel(
+    TFT_DE, /* DE */
+    TFT_VSYNC, /* VSYNC */
+    TFT_HSYNC, /* HSYNC */
+    TFT_PCLK, /* PCLK */
+    TFT_D11, /* R0 */
+    TFT_D12, /* R1 */
+    TFT_D13, /* R2 */
+    TFT_D14, /* R3 */
+    TFT_D15, /* R4 */
+    TFT_D5, /* G0 */
+    TFT_D6, /* G1 */
+    TFT_D7, /* G2 */
+    TFT_D8, /* G3 */
+    TFT_D9, /* G4 */
+    TFT_D10, /* G5 */
+    TFT_D0, /* B0 */
+    TFT_D1, /* B1 */
+    TFT_D2, /* B2 */
+    TFT_D3, /* B3 */
+    TFT_D4, /* B4 */
+    1, /* hsync_polarity */
+    8, /* hsync_front_porch */
+    10, /* hsync_pulse_width */
+    50, /* hsync_back_porch */
+    1, /* vsync_polarity */
+    8, /* vsync_front_porch */
+    10, /* vsync_pulse_width */
+    20 /* vsync_back_porch */
+);
+
+Arduino_RGB_Display *gfx = new Arduino_RGB_Display(
+    TFT_WIDTH, /* width */
+    TFT_HEIGHT, /* height */
+    rgbpanel,
+    0, /* rotation */
+    true, /* auto_flush (IPS, in makerfabs project it is IPS) */
+    bus,
+    41, /* RST */
+    gc9503v_type1_init_operations,
+    sizeof(gc9503v_type1_init_operations)
+);
+
+void setup(void)
+{
+    pinMode(5, OUTPUT);
+    digitalWrite(5, HIGH);
+
+    Serial.begin(115200);
+    delay(500);
+    Serial.println("Starting...");
+    gfx->begin();
+    gfx->fillScreen(BLACK);
+    gfx->setCursor(10, 10);
+    gfx->setTextColor(RED);
+    gfx->println("Hello World!");
+    Serial.println("Setup done");
+}
+
+void loop()
+{
+}

@@ -26,6 +26,8 @@ public:
       cfg.offset_x = 0;
       cfg.offset_y = 0;
 
+      cfg.pin_rst = TFT_VSYNC;
+
       _panel_instance.config(cfg);
     }
 
@@ -65,16 +67,18 @@ public:
       cfg.pin_pclk = TFT_PCLK;
       cfg.freq_write = 15000000;
 
-      cfg.hsync_polarity = 1; // #
-      cfg.hsync_front_porch = 10;
-      cfg.hsync_pulse_width = 8;
+      cfg.hsync_polarity = 1;
+      cfg.hsync_front_porch = 8;
+      cfg.hsync_pulse_width = 10;
       cfg.hsync_back_porch = 50;
-      cfg.vsync_polarity = 1; // #
-      cfg.vsync_front_porch = 10;
-      cfg.vsync_pulse_width = 8;
+      cfg.vsync_polarity = 1;
+      cfg.vsync_front_porch = 8;
+      cfg.vsync_pulse_width = 10;
       cfg.vsync_back_porch = 20;
-      cfg.pclk_idle_high = 0; // 0 #
-      cfg.de_idle_high = 0;   // 1 #
+      cfg.pclk_idle_high = 0;
+      cfg.de_idle_high = 0;
+      cfg.pclk_active_neg = 0;
+
       _bus_instance.config(cfg);
     }
     _panel_instance.setBus(&_bus_instance);
